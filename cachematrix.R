@@ -22,30 +22,30 @@
 ## make a caheable object to store the inversed matrix as well as
 ## the corresponding original matrix
 
-makeCacheMatrix <- function(x = matrix()) {
+makeCacheMatrix <- function(original_matrix = matrix()) {
     
     # initialize the object
-    m <- NULL
+    result <- NULL
     
     # initialize the cache with the original matrix
-    set <- function(y) {
-        x <<- y
-        m <<- NULL
+    set <- function(m) {
+        original_matrix <<- m
+        result <<- NULL
     }
     
     # retrieve the original matrix
     get <- function() {
-        x
+        original_matrix
     }
     
     # cache the inversed matrix
     setinverse <- function(matrix) {
-        m <<- matrix
+        result <<- matrix
     }
     
     # retrieve the cached invsersed matrix
     getinverse <- function() {
-        m
+        result 
     }
     
     list(set = set, get = get, setinverse = setinverse, getinverse = getinverse)
@@ -59,25 +59,25 @@ makeCacheMatrix <- function(x = matrix()) {
 ## computing it another time. When the result is not cached
 ## the result will be computed and saved to the cache.
 
-cacheSolve <- function(x, ...) {
+cacheSolve <- function(cm, ...) {
     ## Return a matrix that is the inverse of 'x'
     
     # query the cache
-    m <- x$getinverse()
-    if (!is.null(m)) {
+    result <- cm$getinverse()
+    if (!is.null(result)) {
         # cache hit and return the cached result
         message("getting cached result")
-        return(m)
+        return(result)
     }
     
     # retrive the original matrix from the object
-    data <- x$get()
+    data <- cm$get()
     # solve the inversed matrix by native R solve() function
-    m <- solve(data, ...)
+    result <- solve(data, ...)
     # save the result to the cache
-    x$setinverse(m)
+    cm$setinverse(result)
 
     # return the inversed matrix
-    m
+    result
 }
 
